@@ -8,7 +8,6 @@ Este projeto consiste em iniciar um pouco de desenvolvimento para back-end na li
 As técnicas e tecnologias utilizadas no projeto são:
 
 - `Go`: tecnologia ultilizada no projeto para fins educativos.
-- `DDD`: Domain Driven Design
 - `Clean Architecture`: Arquiterura do projeto
 - `SOLID`: Implementado um pouco de SOLID
 - `DATABASE`: Criado persistência de dados local
