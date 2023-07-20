@@ -7,10 +7,11 @@ Este projeto consiste em iniciar um pouco de desenvolvimento para back-end na li
 
 As técnicas e tecnologias utilizadas no projeto são:
 
-- `Go`: tecnologia ultilizada no projeto para fins educativos.
-- `Clean Architecture`: Arquiterura do projeto
-- `SOLID`: Implementado um pouco de SOLID
-- `DATABASE`: Criado persistência de dados local
+- `Go`: Tecnologia Ultilizada no Projeto para Fins Educativos.
+- `Clean Architecture`: Arquiterura do Projeto.
+- `Unit Tests`: Implementado Testes Unitários.
+- `SOLID`: Implementado um Pouco de SOLID.
+- `DATABASE`: Criado Persistência de Dados Local.
 
 ### 🐙 Clonando o projeto
 
