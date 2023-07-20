@@ -28,7 +28,7 @@ func (o *Order) Validate() error {
 		return errors.New("id is required")
 	}
 	if o.Price <= 0 {
-		return errors.New("price is required")
+		return errors.New("price must be greater than zero")
 	}
 	if o.Tax <= 0 {
 		return errors.New("tax is required")
