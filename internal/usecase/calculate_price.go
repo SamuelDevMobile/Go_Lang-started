@@ -20,6 +20,12 @@ type CalculateFinalPrice struct {
 	OrderRepository entitys.OrderRepositoryInterface
 }
 
+func NewCalculateFinalPrice(orderRepository entitys.OrderRepositoryInterface) *CalculateFinalPrice { 
+	return &CalculateFinalPrice{ 
+		OrderRepository: orderRepository,
+	}
+}
+
 func (c *CalculateFinalPrice) Execute(input OrderInput) (*OrderOutput, error) {
 	order, err := entitys.NewOrder(input.ID, input.Price, input.Tax)
 	if err != nil {

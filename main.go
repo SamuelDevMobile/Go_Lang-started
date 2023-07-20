@@ -1,7 +1,12 @@
 package main
 
 import (
-	"github.com/SamuelDevMobile/Go_Lang-started/internal/entitys"
+	"fmt"
+	"database/sql"
+
+	"github.com/SamuelDevMobile/Go_Lang-started/internal/infra/database"
+	"github.com/SamuelDevMobile/Go_Lang-started/internal/usecase"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Car struct {
@@ -30,14 +35,32 @@ func soma(x, y int) int {
 }
 
 func main() {
-	order, err := entitys.NewOrder("1", 10, 1)
+
+	db, err := sql.Open("sqlite3", "db.sqlite3")
 	if err != nil {
-		println(err.Error())
-	} else {
-		println(order.ID)
+		panic(err)
 	}
 
+	orderRepository := database.NewOrderRepository(db)
+	us := usecase.NewCalculateFinalPrice(orderRepository)
 
+	input := usecase.OrderInput{
+		ID:    "1234",
+		Price: 10.0,
+		Tax:   1.0,
+	}
+	output, err := us.Execute(input)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(output)
+
+	// order, err := entitys.NewOrder("1", 10, 1)
+	// if err != nil {
+	// 	println(err.Error())
+	// } else {
+	// 	println(order.ID)
+	// }
 
 	// car := Car{ // declarando e atribuindo a variavel car
 	// 	Model: "Ferrari",
