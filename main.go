@@ -1,5 +1,9 @@
 package main
 
+import (
+	"github.com/SamuelDevMobile/Go_Lang-started/internal/entitys"
+)
+
 type Car struct {
 	Model string
 	Color string
@@ -26,7 +30,12 @@ func soma(x, y int) int {
 }
 
 func main() {
-	
+	order, err := entitys.NewOrder("1", 10, 1)
+	if err != nil {
+		println(err.Error())
+	} else {
+		println(order.ID)
+	}
 
 
 
