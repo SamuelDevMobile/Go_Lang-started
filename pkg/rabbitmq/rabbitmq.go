@@ -10,7 +10,7 @@ func OpenChannel() (*amqp.Channel, error) {
 		return nil, err
 	}
 	ch, err := conn.Channel()
-	if err != nil { 
+	if err != nil {
 		return nil, err
 	}
 	return ch, nil

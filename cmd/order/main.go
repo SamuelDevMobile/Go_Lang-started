@@ -1,12 +1,13 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
-	"database/sql"
 
 	"github.com/SamuelDevMobile/Go_Lang-started/internal/infra/database"
 	"github.com/SamuelDevMobile/Go_Lang-started/internal/usecase"
+	"github.com/SamuelDevMobile/Go_Lang-started/pkg/rabbitmq"
 	_ "github.com/mattn/go-sqlite3"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -45,35 +46,30 @@ func main() {
 	defer db.Close() // espera tudo rodar e depois executa o close
 	orderRepository := database.NewOrderRepository(db)
 	uc := usecase.NewCalculateFinalPrice(orderRepository)
-
-	
-
-	// input := usecase.OrderInput{
-	// 	ID:    "12334",
-	// 	Price: 10.0,
-	// 	Tax:   1.0,
-	// }
-	// output, err := uc.Execute(input)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// fmt.Println(output)
+	ch, err := rabbitmq.OpenChannel()
+	if err != nil {
+		panic(err)
+	}
+	defer ch.Close()
+	msgRabbitmqChannel := make(chan amqp.Delivery)
+	go rabbitmq.Consume(ch, msgRabbitmqChannel) // escutando a fila // processo que trava // T2
+	rabbitmqWorker(msgRabbitmqChannel, uc)
 }
 
-func rabbitmqWorker(msgChan chan amqp.Delivery, uc usecase.CalculateFinalPrice) {
+func rabbitmqWorker(msgChan chan amqp.Delivery, uc *usecase.CalculateFinalPrice) {
 	fmt.Println("Starting rabbitmq")
 
 	for msg := range msgChan {
 		var input usecase.OrderInput
 		err := json.Unmarshal(msg.Body, &input)
-		if err != nil { 
+		if err != nil {
 			panic(err)
 		}
 		output, err := uc.Execute(input)
 		if err != nil {
 			panic(err)
 		}
-		msg.Ack(false) 
+		msg.Ack(false) // diz ao rabbitmq que ja consumi essa mensagem
 		fmt.Println("Mensagem processada e salva no banco: ", output)
 	}
 }
