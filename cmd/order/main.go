@@ -1,12 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"database/sql"
 
 	"github.com/SamuelDevMobile/Go_Lang-started/internal/infra/database"
 	"github.com/SamuelDevMobile/Go_Lang-started/internal/usecase"
 	_ "github.com/mattn/go-sqlite3"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type Car struct {
@@ -42,30 +44,36 @@ func main() {
 	}
 	defer db.Close() // espera tudo rodar e depois executa o close
 	orderRepository := database.NewOrderRepository(db)
-	us := usecase.NewCalculateFinalPrice(orderRepository)
-	input := usecase.OrderInput{
-		ID:    "1234",
-		Price: 10.0,
-		Tax:   1.0,
-	}
-	output, err := us.Execute(input)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(output)
+	uc := usecase.NewCalculateFinalPrice(orderRepository)
 
-	// order, err := entitys.NewOrder("1", 10, 1)
+	
+
+	// input := usecase.OrderInput{
+	// 	ID:    "12334",
+	// 	Price: 10.0,
+	// 	Tax:   1.0,
+	// }
+	// output, err := uc.Execute(input)
 	// if err != nil {
-	// 	println(err.Error())
-	// } else {
-	// 	println(order.ID)
+	// 	panic(err)
 	// }
+	// fmt.Println(output)
+}
 
-	// car := Car{ // declarando e atribuindo a variavel car
-	// 	Model: "Ferrari",
-	// 	Color: "Red",
-	// }
-	// car.Start()
-	// car.ChangeColor("Blue")
-	// println(car.Color)
+func rabbitmqWorker(msgChan chan amqp.Delivery, uc usecase.CalculateFinalPrice) {
+	fmt.Println("Starting rabbitmq")
+
+	for msg := range msgChan {
+		var input usecase.OrderInput
+		err := json.Unmarshal(msg.Body, &input)
+		if err != nil { 
+			panic(err)
+		}
+		output, err := uc.Execute(input)
+		if err != nil {
+			panic(err)
+		}
+		msg.Ack(false) 
+		fmt.Println("Mensagem processada e salva no banco: ", output)
+	}
 }
