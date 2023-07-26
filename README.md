@@ -12,6 +12,7 @@ As técnicas e tecnologias utilizadas no projeto são:
 - `Unit Tests`: Implementado Testes Unitários.
 - `SOLID`: Implementado um Pouco de SOLID.
 - `DATABASE`: Criado Persistência de Dados Local.
+- `RABBITMQ`: Serviço de mensageria.
 
 ### 🐙 Clonando o projeto
 
