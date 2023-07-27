@@ -22,7 +22,7 @@ As técnicas e tecnologias utilizadas no projeto são:
 
 Para conseguir seguir este README e rodar o projeto você pode precisar dos seguintes itens:
 - Git para clonar o projeto e acessar as branches. Você pode instalar [aqui](https://git-scm.com/downloads);
-- Go Lang para podermos rodar `go mod tidy`. Você pode instala-lo [aqui]([https://nodejs.org/en/](https://go.dev/doc/install));
+- Go Lang para podermos rodar `go mod tidy`.Você pode instala-lo [aqui]([https://nodejs.org/en/](https://go.dev/doc/install));
 
 ### 🐙 Clonando o projeto
 
